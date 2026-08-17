@@ -211,8 +211,13 @@ Verbindet unterschiedliche Netzwerke (z.B. LAN mit dem Internet) auf Schicht 3 u
 
 **Worin unterscheiden sich WAN, LAN und WLAN?**
 
+
 | Begriff | Bedeutung |
 |---|---|
 | LAN (Local Area Network) | Lokales Netzwerk, meist auf ein Gebäude oder Gelände begrenzt, kabelgebunden |
 | WLAN (Wireless LAN) | Dasselbe wie LAN, aber drahtlos per Funk |
 | WAN (Wide Area Network) | Netzwerk, das über grosse geografische Distanzen mehrere LANs miteinander verbindet, das Internet selbst ist das grösste WAN |
+
+> Hinweis: Ich habe KI nur für das Design verwendet.
+> Den Rest habe ich selbst gelöst.
+>
