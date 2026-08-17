@@ -1,0 +1,218 @@
+# Netzwerktechnik Grundlagen
+
+## Fragen
+
+### 1. Was versteht man in der Netzwerktechnik unter einer «logischen Adresse» und was unter einer «physikalischen Adresse»?
+
+Die **logische Adresse** ist die IP-Adresse. Sie ist software-basiert und kann sich ändern (z.B. durch DHCP oder manuelles Umkonfigurieren).
+
+Die **physikalische Adresse** ist die MAC-Adresse. Sie ist fest in die Netzwerkkarte eingebrannt und weltweit einmalig.
+
+### 2. Was bezweckt das auf einem PC ausgeführte arp-Kommando?
+
+Zeigt die Zuordnungstabelle zwischen IP-Adressen und MAC-Adressen an (ARP-Cache), die der PC im lokalen Netz gespeichert hat. Mit `arp -a` kann man sich diese Tabelle anzeigen lassen.
+
+### 3. Wo trägt man unter Microsoft Windows den Hostnamen ein?
+
+Systemsteuerung → System → Computername (oder über `sysdm.cpl`). Der aktuelle Hostname lässt sich auch mit dem Befehl `hostname` in der Kommandozeile anzeigen.
+
+> Diesen Teil mit dem Vergleich zum Nachbarn musst du selbst durchführen.
+
+### 4. Muss der Hostname einmalig sein?
+
+Ja, innerhalb desselben Netzwerks (derselben Domäne oder Arbeitsgruppe) muss der Hostname eindeutig sein, sonst gibt es Konflikte bei der Namensauflösung.
+
+### 5. Welche IPv4-Adressen können weltweit mehrmals vorkommen?
+
+Die privaten IP-Bereiche (siehe Frage 11). Diese sind nicht im Internet routbar und können deshalb in verschiedenen lokalen Netzen mehrfach verwendet werden.
+
+### 6. Wo trägt man unter Microsoft Windows den Defaultrouter ein?
+
+In den Netzwerkeinstellungen des Adapters, unter den IPv4-Eigenschaften als "Standardgateway" (Default Gateway).
+
+### 7. Wozu dient der WIN-Befehl ncpa.cpl?
+
+Öffnet die Netzwerkverbindungen (Übersicht aller Netzwerkadapter), von dort aus kann man z.B. IP-Einstellungen bearbeiten.
+
+### 8. Was bedeutet «Netzwerkparameter automatisch beziehen»? Welcher Dienst wird dazu benötigt?
+
+Bedeutet, dass der PC seine IP-Adresse, Subnetzmaske, Gateway und DNS-Server automatisch von einem DHCP-Server bezieht, statt sie manuell einzutragen.
+
+Dafür wird der **DHCP-Dienst** benötigt (Dynamic Host Configuration Protocol).
+
+### 9. Mit welchem Windows-Kommando lässt sich eine dynamisch zugewiesene Adresse neu zuweisen?
+
+```
+ipconfig /release
+ipconfig /renew
+```
+
+Erst wird die Adresse freigegeben, danach eine neue angefordert.
+
+### 10. Welche Geräte benötigen eine statische Einstellung der Netzwerkparameter?
+
+Server, Drucker, Router selbst, sowie generell alle Geräte, die dauerhaft unter derselben Adresse erreichbar sein müssen (z.B. damit DNS-Einträge oder Portweiterleitungen funktionieren).
+
+### 11. Nenne die drei IPv4-Bereiche für LAN's
+
+| Klasse | Bereich |
+|---|---|
+| A | 10.0.0.0 – 10.255.255.255 |
+| B | 172.16.0.0 – 172.31.255.255 |
+| C | 192.168.0.0 – 192.168.255.255 |
+
+### 12. Wie sind Netzwerkadresse und Broadcastadresse definiert?
+
+- **Netzwerkadresse**: IP-Adresse, bei der alle Host-Bits auf 0 gesetzt sind. Identifiziert das Netz selbst und kann keinem Gerät zugewiesen werden.
+- **Broadcastadresse**: IP-Adresse, bei der alle Host-Bits auf 1 gesetzt sind. Wird verwendet, um alle Geräte im Netz gleichzeitig anzusprechen.
+
+### 13. Muss der in den PC-Netzwerkeinstellungen eingetragene DNS-Server sich im selben Netz befinden wie der PC?
+
+Nein, der DNS-Server muss nicht im selben Netz liegen. Er muss lediglich über den Router/Gateway erreichbar sein. Viele nutzen öffentliche DNS-Server wie 8.8.8.8 (Google) oder 1.1.1.1 (Cloudflare), die klar ausserhalb des eigenen LANs liegen.
+
+### 14. Was bezweckt ein UNC-Pfad und wie ist dieser aufgebaut?
+
+Ein UNC-Pfad (Universal Naming Convention) dient dazu, auf freigegebene Ressourcen im Netzwerk zuzugreifen, z.B. Ordner oder Drucker, ohne einen Laufwerksbuchstaben zuweisen zu müssen.
+
+**Aufbau:**
+```
+\\Servername\Freigabename\Ordner\Datei
+```
+
+### 15. Erkläre den Begriff «Kollisionsdomäne».
+
+Ein Netzwerkbereich, in dem sich mehrere Geräte eine gemeinsame Übertragungsstrecke teilen, sodass es zu Datenkollisionen kommen kann, wenn zwei Geräte gleichzeitig senden.
+
+Ein Hub erzeugt eine grosse Kollisionsdomäne für alle angeschlossenen Geräte, ein Switch trennt jeden Port in eine eigene Kollisionsdomäne auf.
+
+### 16. PC1 (10.0.1.15/24), PC2 (10.0.1.16/24) und PC3 (10.0.2.27/24) am selben Switch
+
+PC1 und PC2 sind im selben Netz (10.0.1.0/24) und können problemlos miteinander kommunizieren.
+
+PC3 ist in einem anderen Netz (10.0.2.0/24), obwohl er am selben Switch hängt. Da ein Switch nur auf Layer 2 (MAC-Adressen) arbeitet und keine Routing-Funktion hat, kann PC3 nicht mit PC1 und PC2 kommunizieren, da sie sich logisch in unterschiedlichen Subnetzen befinden.
+
+**Verbesserung:** Entweder man passt die IP-Adresse von PC3 an, sodass er auch im 10.0.1.0/24-Netz ist (z.B. 10.0.1.17/24), oder man setzt einen Router zwischen die beiden Subnetze, der das Routing zwischen 10.0.1.0/24 und 10.0.2.0/24 übernimmt.
+
+### 17. IP-Adresse 10.0.0.9 und Subnetzmaske 255.0.0.0
+
+| | Dezimal | Binär |
+|---|---|---|
+| IP-Adresse | 10 . 0 . 0 . 9 | `00001010.00000000.00000000.00001001` |
+| Subnetzmaske | 255 . 0 . 0 . 0 | `11111111.00000000.00000000.00000000` |
+
+Trennstrich Netz-ID/Host-ID: nach dem **ersten Oktett** (`00001010` | `00000000.00000000.00001001`), da die Maske /8 ist.
+
+### 18. IP-Adresse 172.16.20.161 und Subnetzmaske 255.255.0.0
+
+| | Dezimal | Binär |
+|---|---|---|
+| IP-Adresse | 172 . 16 . 20 . 161 | `10101100.00010000.00010100.10100001` |
+| Subnetzmaske | 255 . 255 . 0 . 0 | `11111111.11111111.00000000.00000000` |
+
+Trennstrich Netz-ID/Host-ID: nach dem **zweiten Oktett** (`10101100.00010000` | `00010100.10100001`), da die Maske /16 ist.
+
+### 19. IP-Adresse 192.168.5.33 und Subnetzmaske 255.255.255.0
+
+| | Dezimal | Binär |
+|---|---|---|
+| IP-Adresse | 192 . 168 . 5 . 33 | `11000000.10101000.00000101.00100001` |
+| Subnetzmaske | 255 . 255 . 255 . 0 | `11111111.11111111.11111111.00000000` |
+
+Trennstrich Netz-ID/Host-ID: nach dem **dritten Oktett** (`11000000.10101000.00000101` | `00100001`), da die Maske /24 ist.
+
+### 20. Maximale Anzahl PCs bei Subnetzmaske 255.255.255.0 mit Internetanbindung
+
+Bei einer /24-Subnetzmaske gibt es 256 Host-Adressen (2^8), davon fallen die Netzwerkadresse (.0) und die Broadcastadresse (.255) weg. Zusätzlich braucht es eine Adresse für den Router/Gateway.
+
+```
+256 − 2 (Netz + Broadcast) − 1 (Gateway) = 253 PCs
+```
+
+### 21. Bedeutung der IP-Adresse 127.0.0.1
+
+Zutreffend: **Loopback-Adresse**
+
+Das ist die Adresse, mit der ein Gerät sich selbst anspricht (localhost), unabhängig von einer echten Netzwerkverbindung.
+
+Nicht zutreffend:
+- Multicastadresse (falsch, Multicast wäre z.B. 224.0.0.0–239.255.255.255)
+- Eigener Netzwerkadapter (nicht korrekt, es ist eine spezielle virtuelle Loopback-Schnittstelle)
+- Broadcastadresse (falsch)
+- Netzwerkadresse (falsch)
+
+### 22. IP-Adressentwurf für Class-C-Netzwerk
+
+| Gerät | IP-Adresse |
+|---|---|
+| Subnetzmaske | 255.255.255.0 (/24) |
+| PC1 | 192.168.1.1 |
+| PC2 | 192.168.1.2 |
+| PC3 | 192.168.1.3 |
+| RT1 (LAN-seitig) | 192.168.1.254 |
+| Default Gateway (PC1–PC3) | 192.168.1.254 |
+
+### 23. Resultat von `ipconfig /all` auf PC1
+
+```
+Host Name . . . . . . . . . . . : PC1
+Ethernet adapter Local Area Connection:
+   Description . . . . . . . . . : Realtek PCIe GbE Family Controller
+   Physical Address. . . . . . . : 00-1A-2B-3C-4D-5E
+   DHCP Enabled. . . . . . . . . : No
+   IP Address. . . . . . . . . . : 192.168.1.1
+   Subnet Mask . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . : 192.168.1.254
+   DNS Server. . . . . . . . . . : 8.8.8.8
+```
+
+### 24. Beurteilung der Netzwerk-Konfiguration (Bild 3)
+
+PC1, PC2 und PC3 haben die IP-Adressen 169.254.1.1 bis .3 mit SM 255.255.0.0. Das ist der **APIPA-Bereich** (Automatic Private IP Addressing), den Windows automatisch vergibt, wenn kein DHCP-Server gefunden wird.
+
+Diese Konfiguration ist **nicht optimal**, weil kein Default Gateway eingetragen ist und die Adressen nur für die lokale Kommunikation innerhalb des Intranets taugen.
+
+### 25. Warum ist das Internet für PC3 nicht erreichbar?
+
+Weil bei der APIPA-Konfiguration kein Default Gateway eingetragen ist. Ohne Gateway weiss PC3 nicht, wohin er Pakete schicken soll, die für ein anderes Netz (wie das Internet) bestimmt sind. Die Kommunikation bleibt somit auf das lokale Intranet beschränkt.
+
+---
+
+## Begriffe erklären
+
+**Client**
+Ein Gerät oder Programm, das einen Dienst von einem Server anfordert, z.B. ein PC, der eine Webseite von einem Webserver abruft.
+
+**Server**
+Ein Gerät oder Programm, das Dienste oder Ressourcen für andere Geräte (Clients) im Netzwerk bereitstellt, z.B. ein Webserver oder Fileserver.
+
+**IPv4-Adresse**
+Eine 32-Bit-Adresse, die aus vier durch Punkte getrennten Zahlen zwischen 0 und 255 besteht (z.B. 192.168.1.1). Dient zur eindeutigen Identifikation eines Geräts in einem IP-Netzwerk.
+
+**Subnetzmaske**
+Eine 32-Bit-Zahl, die zusammen mit der IP-Adresse definiert, welcher Teil der Adresse zur Netz-ID gehört und welcher zur Host-ID.
+
+**MAC-Adresse**
+Eine 48-Bit-Adresse (meist als 6 Hex-Paare geschrieben, z.B. 00-1A-2B-3C-4D-5E), die fest in jede Netzwerkkarte eingebrannt ist und diese weltweit eindeutig identifiziert.
+
+**Weshalb benötigt jedes Netzwerkgerät eine MAC-Adresse?**
+Damit auf Schicht 2 (Sicherungsschicht) Datenpakete innerhalb des lokalen Netzes eindeutig einem physischen Gerät zugeordnet werden können, unabhängig von der IP-Konfiguration.
+
+**Weshalb benötigt jedes Netzwerkgerät eine IP-Adresse?**
+Damit es auf Schicht 3 (Vermittlungsschicht) über verschiedene Netze hinweg (also auch übers Internet) angesprochen und geroutet werden kann.
+
+**Was unterscheidet eine Netzwerkadresse von einer Hostadresse?**
+Die Netzwerkadresse identifiziert das gesamte Subnetz (Host-Bits sind alle 0), die Hostadresse identifiziert ein einzelnes Gerät innerhalb dieses Subnetzes.
+
+**Welche Aufgabe hat ein Switch?**
+Verbindet mehrere Geräte innerhalb eines lokalen Netzes auf Schicht 2 und leitet Datenpakete anhand der MAC-Adresse gezielt nur an den richtigen Port weiter, statt sie an alle zu senden (wie ein Hub das tun würde).
+
+**Welche Aufgabe hat ein Router?**
+Verbindet unterschiedliche Netzwerke (z.B. LAN mit dem Internet) auf Schicht 3 und leitet Datenpakete anhand der IP-Adresse zwischen diesen Netzen weiter.
+
+**Worin unterscheiden sich WAN, LAN und WLAN?**
+
+| Begriff | Bedeutung |
+|---|---|
+| LAN (Local Area Network) | Lokales Netzwerk, meist auf ein Gebäude oder Gelände begrenzt, kabelgebunden |
+| WLAN (Wireless LAN) | Dasselbe wie LAN, aber drahtlos per Funk |
+| WAN (Wide Area Network) | Netzwerk, das über grosse geografische Distanzen mehrere LANs miteinander verbindet, das Internet selbst ist das grösste WAN |
