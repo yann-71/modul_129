@@ -1,0 +1,198 @@
+# M129 UB3 - Subnetting Aufgaben (Auftrag 1)
+
+Hier meine Lösungen zu den Subnetting Aufgaben, jeweils mit Rechenweg.
+
+## Aufgabe 1: IP-Adressen interpretieren
+
+Vorgehen bei jeder Adresse: zuerst die Maske in Binär umwandeln, dann schauen wie viele Host-Bits übrig bleiben (das ergibt die Blockgrösse), und daraus die Netz- und Broadcastadresse berechnen.
+
+### a) 123.45.67.89 /29
+
+/29 heisst 29 Netz-Bits, im letzten Oktett bleiben also nur 3 Host-Bits übrig (32-29=3).
+Das ergibt eine Blockgrösse von 2^3 = 8.
+
+Die Blöcke im letzten Oktett gehen dann immer in 8er Schritten: 0, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96...
+
+89 liegt zwischen 88 und 96, also:
+- Netzwerkadresse: 123.45.67.88
+- Broadcastadresse: 123.45.67.95 (das ist die letzte Adresse vor dem nächsten Block, 88+8-1)
+- Subnetzmaske: 255.255.255.248
+- Adressen im Subnetz: 8
+- Nutzbare Hosts: 8-2 = 6 (Netz- und Broadcastadresse zählen nicht)
+- Subnetze im letzten Oktett: 256/8 = 32
+
+### b) 123.45.67.89 / 255.255.255.240
+
+255.255.255.240 in Binär ist 11110000, das sind 4 Netz-Bits im letzten Oktett, also /28.
+4 Host-Bits übrig -> Blockgrösse 2^4 = 16.
+
+Blöcke: 0, 16, 32, 48, 64, 80, 96...
+89 liegt zwischen 80 und 96:
+- Netzwerkadresse: 123.45.67.80
+- Broadcastadresse: 123.45.67.95
+- Subnetze im letzten Oktett: 256/16 = 16
+- Adressen im Subnetz: 16
+- Nutzbare Hosts: 16-2 = 14
+
+### c) 123.45.67.89 / 255.255.255.224
+
+255.255.255.224 = /27 (3 Netz-Bits im letzten Oktett -> 5 Host-Bits übrig -> Blockgrösse 2^5=32).
+
+Blöcke: 0, 32, 64, 96...
+89 liegt zwischen 64 und 96:
+- Netzwerkadresse: 123.45.67.64
+- Broadcastadresse: 123.45.67.95
+- Subnetze im letzten Oktett: 256/32 = 8
+- Adressen im Subnetz: 32
+- Nutzbare Hosts: 32-2 = 30
+
+### d) 123.45.67.217 /25
+
+/25 -> 7 Host-Bits übrig -> Blockgrösse 2^7 = 128.
+
+Blöcke: 0, 128.
+217 liegt im Block ab 128:
+- Netzwerkadresse: 123.45.67.128
+- Broadcastadresse: 123.45.67.255
+- Subnetze im letzten Oktett: 256/128 = 2
+- Adressen im Subnetz: 128
+- Nutzbare Hosts: 128-2 = 126
+
+### e) 8.88.111.62 /27
+
+Gleiches Prinzip wie c), Blockgrösse 32.
+
+Blöcke: 0, 32, 64...
+62 liegt zwischen 32 und 64:
+- Netzwerkadresse: 8.88.111.32
+- Broadcastadresse: 8.88.111.63
+- Subnetze im letzten Oktett: 8
+- Adressen im Subnetz: 32
+- Nutzbare Hosts: 30
+
+---
+
+## Aufgabe 2: Plausibilitätsprüfung LAN-A / LAN-B
+
+Beide haben /29 (255.255.255.248), Blockgrösse also 8, Netzadressen müssen ein Vielfaches von 8 sein.
+
+LAN-A: 10.128.10.16 -> 16/8 = 2, passt. Bereich .16 bis .23.
+
+LAN-B: 10.128.10.12 -> 12/8 = 1.5, passt NICHT. 10.128.10.12 kann bei einer /29 Maske gar keine Netzwerkadresse sein.
+
+**Antwort:** Nein, das ist so nicht möglich, weil die Netzwerkadresse von LAN-B (10.128.10.12) für eine /29-Maske ungültig ist. Die richtige Netzadresse wäre 10.128.10.8 (Bereich .8-.15). Korrigiert man das, überschneiden sich LAN-A (.16-.23) und LAN-B (.8-.15) nicht, dann wäre es in Ordnung.
+
+---
+
+## Aufgabe 3: Netzadressen vergleichen
+
+Hier fehlen mir noch die 4 IP-Adressen und die 2 Subnetzmasken aus Bild1, kann ich also noch nicht ausrechnen. Sobald ich die Werte habe, rechne ich das nach dem gleichen Prinzip: Maske anschauen, Blockgrösse bestimmen, für jede Adresse die Netzadresse berechnen und schauen ob sie übereinstimmt.
+
+---
+
+## Aufgabe 4: 192.168.0.0/24 in Subnetze aufteilen
+
+Idee: verschieden grosse Blöcke nacheinander abschneiden, immer von der grössten zur kleinsten Grösse, damit es sauber aufgeht ohne Lücken.
+
+| Subnetz | Bereich | CIDR | Grösse |
+|---|---|---|---|
+| A | .0 - .127 | /25 | 128 |
+| B | .128 - .191 | /26 | 64 |
+| C | .192 - .223 | /27 | 32 |
+| D | .224 - .239 | /28 | 16 |
+| E | .240 - .247 | /29 | 8 |
+| F | .248 - .255 | /29 | 8 |
+
+Im Kreisdiagramm einfach die Grenzen 0, 128, 192, 224, 240, 248, 255 einzeichnen und die Maske dazuschreiben.
+
+---
+
+## Aufgabe 5: 213.13.26.0 -> 1x128, 1x64, 2x32
+
+Rechenweg: einfach von 0 weg der Reihe nach die Blöcke abtragen.
+
+0 + 128 = 128 (Grenze Netz 1)
+128 + 64 = 192 (Grenze Netz 2)
+192 + 32 = 224 (Grenze Netz 3)
+224 + 32 = 256 -> .255 (Grenze Netz 4)
+
+| Subnetz | Netzadresse | Maske | Broadcast |
+|---|---|---|---|
+| 1 (128er) | 213.13.26.0 | /25 | 213.13.26.127 |
+| 2 (64er) | 213.13.26.128 | /26 | 213.13.26.191 |
+| 3 (32er) | 213.13.26.192 | /27 | 213.13.26.223 |
+| 4 (32er) | 213.13.26.224 | /27 | 213.13.26.255 |
+
+---
+
+## Aufgabe 6: 192.192.20.0/24
+
+3x ein Viertel von 256 = 3x 64, und 2x ein Sechzehntel von 256 = 2x 16.
+
+64+64+64 = 192, dann 16+16 = 32, macht zusammen 224. Es bleiben 32 Adressen am Schluss übrig (also noch frei für später).
+
+| Subnetz | Netzadresse | Maske | Broadcast |
+|---|---|---|---|
+| 1 (1/4) | 192.192.20.0 | /26 | 192.192.20.63 |
+| 2 (1/4) | 192.192.20.64 | /26 | 192.192.20.127 |
+| 3 (1/4) | 192.192.20.128 | /26 | 192.192.20.191 |
+| 4 (1/16) | 192.192.20.192 | /28 | 192.192.20.207 |
+| 5 (1/16) | 192.192.20.208 | /28 | 192.192.20.223 |
+
+Frei: .224 - .255
+
+---
+
+## Aufgabe 7: 129.168.31.0/24, 4 LAN + 3 Standleitungen
+
+Bei VLSM Aufgaben immer zuerst nach Grösse sortieren (grösster Bedarf zuerst), sonst gehts nicht sauber auf.
+
+Bedarf pro LAN und wie viele Adressen das jeweils braucht (immer die nächst grössere 2er Potenz, minus 2 für Netz/Broadcast):
+
+- LAN-A: 50 Geräte -> braucht mind. 52 Adressen -> nächste 2er Potenz ist 64 -> /26
+- LAN-C: 45 Geräte -> 64 -> /26
+- LAN-B: 40 Geräte -> 64 -> /26
+- LAN-D: 28 Geräte -> 32 -> /27
+- Standleitungen LAN-E/F/G: brauchen nur 2 nutzbare Adressen (Punkt-zu-Punkt), aber kleinstmögliche Blockgrösse ist 4 -> /30
+
+Jetzt der Reihe nach eintragen, sortiert von gross nach klein:
+
+| Netz | Netzadresse | Maske | Broadcast |
+|---|---|---|---|
+| LAN-A | 129.168.31.0 | /26 | 129.168.31.63 |
+| LAN-C | 129.168.31.64 | /26 | 129.168.31.127 |
+| LAN-B | 129.168.31.128 | /26 | 129.168.31.191 |
+| LAN-D | 129.168.31.192 | /27 | 129.168.31.223 |
+| LAN-E | 129.168.31.224 | /30 | 129.168.31.227 |
+| LAN-F | 129.168.31.228 | /30 | 129.168.31.231 |
+| LAN-G | 129.168.31.232 | /30 | 129.168.31.235 |
+
+Rest ab .236 bleibt frei für später.
+
+---
+
+## Aufgabe 8: Muster GmbH, 192.168.100.0/24
+
+Gleiches Prinzip wie bei Aufgabe 7, zuerst Bedarf ermitteln:
+
+- LAN-A: 60 Arbeitsstationen + 2 Server = 62 Geräte -> passt genau in 64er Block -> /26
+- LAN-B: 45 + 1 Server = 46 Geräte -> 64er Block -> /26
+- LAN-C: 22 Arbeitsstationen -> 32er Block reicht -> /27
+- LAN-D (Standleitung Router1-Router2): 4 Adressen -> /30
+- LAN-E (Standleitung Router2-Router3): 4 Adressen -> /30
+
+Wieder von gross nach klein eintragen:
+
+| Netz | Netzadresse | Maske | Broadcast |
+|---|---|---|---|
+| LAN-A | 192.168.100.0 | /26 (255.255.255.192) | 192.168.100.63 |
+| LAN-B | 192.168.100.64 | /26 (255.255.255.192) | 192.168.100.127 |
+| LAN-C | 192.168.100.128 | /27 (255.255.255.224) | 192.168.100.159 |
+| LAN-D | 192.168.100.160 | /30 (255.255.255.252) | 192.168.100.163 |
+| LAN-E | 192.168.100.164 | /30 (255.255.255.252) | 192.168.100.167 |
+
+Rest ab .168 bleibt frei für Erweiterungen.
+
+Logisches Layout: Router1 (LAN-A + Standleitung zu Router2) - Router2 (LAN-B + Standleitung zu Router1 + Standleitung zu Router3) - Router3 (LAN-C + Standleitung zu Router2).
+
+Zeichnung und Test in Packet Tracer konnte ich noch nicht machen, da es probleme mit dem installieren gibt.
