@@ -86,7 +86,25 @@ LAN-B: 10.128.10.12 -> 12/8 = 1.5, passt NICHT. 10.128.10.12 kann bei einer /29 
 
 ## Aufgabe 3: Netzadressen vergleichen
 
-Hier fehlen mir noch die 4 IP-Adressen und die 2 Subnetzmasken aus Bild1, kann ich also noch nicht ausrechnen. Sobald ich die Werte habe, rechne ich das nach dem gleichen Prinzip: Maske anschauen, Blockgrösse bestimmen, für jede Adresse die Netzadresse berechnen und schauen ob sie übereinstimmt.
+Vorgehen: Blockgrösse bestimmen und schauen, in welchem Block das letzte Oktett liegt.
+- /27 -> Blockgrösse 32 -> Blöcke 0, 32, 64, 96...
+- /28 -> Blockgrösse 16 -> Blöcke 0, 16, 32, 48, 64, 80, 96...
+
+| IP-Adresse | Netzadresse bei /27 | Netzadresse bei /28 |
+|---|---|---|
+| A: 192.168.33.55 | 192.168.33.32 | 192.168.33.48 |
+| B: 192.168.33.65 | 192.168.33.64 | 192.168.33.64 |
+| C: 192.168.33.74 | 192.168.33.64 | 192.168.33.64 |
+| D: 192.168.33.90 | 192.168.33.64 | 192.168.33.80 |
+
+Zwei Adressen sind im selben Netz, wenn die Netzadresse gleich ist:
+
+| Im selben Netz? | A+B | A+C | A+D | B+C | B+D | C+D |
+|---|---|---|---|---|---|---|
+| Bei /27 | Nein | Nein | Nein | Ja | Ja | Ja |
+| Bei /28 | Nein | Nein | Nein | Ja | Nein | Nein |
+
+A liegt bei beiden Masken in einem anderen Netz als die anderen (bei /27 im Block .32-.63). Bei /28 wird der Block .64-.95 nochmals halbiert, darum fällt D (.90) in den Block .80-.95 und ist nicht mehr bei B und C.
 
 ---
 
