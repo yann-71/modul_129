@@ -26,6 +26,7 @@ Pro Unterrichtsblock gibt es ein Verzeichnis `TAG-x` mit den drei vorgegebenen U
 | [TAG-3](TAG-3/) | 31.08.2026 | Netze unterteilen - Subnetting | Challenge 3: Subnetting-Fehlersuche |
 | [TAG-4](TAG-4/) | 07.09.2026 | Subnetting (Fortsetzung), Spanning Tree Protocol | Challenge 4: Wer wird Root Bridge? |
 | [TAG-5](TAG-5/) | 21.09.2026 | Subnetze mit Router verbinden - Routing | Challenge 5: Routing-Fehleranalyse |
+| [TAG-6](TAG-6/) | 28.09.2026 | Routing (Fortsetzung): Redundanz und Load Balancing | Challenge 6: Netzwerkfall analysieren |
 
 ## Offene Punkte
 
@@ -36,6 +37,7 @@ Pro Unterrichtsblock gibt es ein Verzeichnis `TAG-x` mit den drei vorgegebenen U
 | TAG-3 | Lösung der Challenge 3 eintragen und zur Besprechung anmelden |
 | TAG-4 | Vorhersagen mit `show spanning-tree` und Ping-Tests in Packet Tracer verifizieren |
 | TAG-5 | Ausfalltests beim statischen Routing, dynamisches Routing mit RIP (Teil 4), RIP-Updates im Simulationsmodus |
+| TAG-6 | erledigt |
 
 ## Hinweis zur Nutzung von KI
 
